@@ -12,7 +12,8 @@
     "start": "turbo run start",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "test:integration": "./test-integration.sh"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

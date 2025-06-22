@@ -15,7 +15,7 @@ export class ItemSeekAPIClient {
   private client: AxiosInstance;
   private authToken?: string;
 
-  constructor(baseURL: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3100') {
+  constructor(baseURL: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3100/api') {
     this.client = axios.create({
       baseURL,
       headers: {

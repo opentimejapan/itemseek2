@@ -1,0 +1,31 @@
+{
+  "name": "@itemseek2/user-manager",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3005",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@itemseek2/ui-mobile": "workspace:*",
+    "@itemseek2/api-client": "workspace:*",
+    "@itemseek2/shared": "workspace:*",
+    "next": "14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "swr": "^2.2.4",
+    "zxcvbn": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/zxcvbn": "^4.4.1",
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}

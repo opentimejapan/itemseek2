@@ -10,9 +10,13 @@ import {
   SwipeableListItem
 } from '@itemseek2/ui-mobile';
 import { useInventoryStore } from '../lib/store';
+import { useRealtimeSync } from '../hooks/useRealtimeSync';
 import { InventoryItem } from '../components/InventoryItem';
 import { QuickActions } from '../components/QuickActions';
 import { SearchBar } from '../components/SearchBar';
+import { NotificationCenter } from '../components/NotificationCenter';
+import { ConnectionStatus } from '../components/ConnectionStatus';
+import { NetworkErrorHandler } from '../components/NetworkErrorHandler';
 
 const navItems = [
   { id: 'inventory', label: 'Inventory', icon: '📦' },
@@ -28,6 +32,7 @@ export default function InventoryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   
   const { items, updateQuantity, deleteItem } = useInventoryStore();
+  const { editingItems } = useRealtimeSync();
 
   const filteredItems = items.filter(item =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -36,6 +41,15 @@ export default function InventoryPage() {
 
   return (
     <div className="min-h-screen pb-20">
+      {/* Connection Status */}
+      <ConnectionStatus />
+      
+      {/* Network Error Handler */}
+      <NetworkErrorHandler />
+      
+      {/* Notifications */}
+      <NotificationCenter />
+      
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200 safe-area-top">
         <div className="px-4 py-3">
@@ -66,6 +80,8 @@ export default function InventoryPage() {
             <InventoryItem
               item={item}
               onUpdate={(quantity) => updateQuantity(item.id, quantity)}
+              isBeingEdited={editingItems.has(item.id)}
+              editedBy={editingItems.get(item.id)}
             />
           </SwipeableListItem>
         ))}

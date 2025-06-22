@@ -2,18 +2,34 @@
 
 import React from 'react';
 import { MobileCard, TouchButton } from '@itemseek2/ui-mobile';
+import { useRealtimeSync } from '../hooks/useRealtimeSync';
 import type { InventoryItem as Item } from '../lib/store';
 
 interface InventoryItemProps {
   item: Item;
   onUpdate: (quantity: number) => void;
+  isBeingEdited?: boolean;
+  editedBy?: string;
 }
 
-export function InventoryItem({ item, onUpdate }: InventoryItemProps) {
+export function InventoryItem({ item, onUpdate, isBeingEdited, editedBy }: InventoryItemProps) {
   const isLowStock = item.quantity <= item.minQuantity;
+  const { startEditing, stopEditing } = useRealtimeSync();
+  
+  const handleQuantityUpdate = (newQuantity: number) => {
+    startEditing(item.id);
+    onUpdate(newQuantity);
+    // Stop editing after a short delay to show the update
+    setTimeout(() => stopEditing(item.id), 1000);
+  };
   
   return (
-    <MobileCard className="mb-3">
+    <MobileCard className={`mb-3 relative ${isBeingEdited ? 'ring-2 ring-blue-400' : ''}`}>
+      {isBeingEdited && editedBy && (
+        <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full z-10">
+          {editedBy} editing...
+        </div>
+      )}
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <h3 className="font-semibold text-gray-900">{item.name}</h3>
@@ -32,14 +48,14 @@ export function InventoryItem({ item, onUpdate }: InventoryItemProps) {
         <TouchButton
           size="sm"
           variant="secondary"
-          onClick={() => onUpdate(Math.max(0, item.quantity - 1))}
+          onClick={() => handleQuantityUpdate(Math.max(0, item.quantity - 1))}
         >
           -
         </TouchButton>
         <TouchButton
           size="sm"
           variant="secondary"
-          onClick={() => onUpdate(item.quantity + 1)}
+          onClick={() => handleQuantityUpdate(item.quantity + 1)}
         >
           +
         </TouchButton>
